@@ -29,7 +29,6 @@
 #include <rclcpp/qos.hpp>
 #include <rclcpp/utilities.hpp>
 #include <sensor_msgs/msg/point_cloud2.hpp>
-#include <std_srvs/Empty.h>
 #include <thread>
 
 namespace icp_loco {

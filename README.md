@@ -35,7 +35,7 @@ A corresponding map can for example be created using [Open3D SLAM](https://githu
 
 Install ROS and library dependencies with:  
 ```bash
-sudo apt install -y ros-humble-pcl-ros ros-humble-pcl-conversions ros-noetic-tf2-geometry libgoogle-glog-dev ros-humble-libpointmatcher
+sudo apt install -y ros-humble-pcl-ros ros-humble-pcl-conversions ros-humble-tf2-geometry libgoogle-glog-dev ros-humble-libpointmatcher
 # OR, use rosdep in your source folder `src` 
 sudo rosdep install -yr --from-paths .
 ```
