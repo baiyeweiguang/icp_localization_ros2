@@ -11,13 +11,10 @@
 #include <cstring>
 #include <string>
 
-namespace icp_loco{
-double readable(const Time &t){
+namespace icp_loco {
+double readable(const Time &t) {
   return toUniversal(t - Duration(637060590580261258)) / 10000.0;
-
 }
-
-
 
 Duration fromSeconds(const double seconds) {
   return std::chrono::duration_cast<Duration>(
@@ -38,7 +35,7 @@ Time fromUniversal(const int64 ticks) { return Time(Duration(ticks)); }
 
 int64 toUniversal(const Time time) { return time.time_since_epoch().count(); }
 
-std::ostream& operator<<(std::ostream& os, const Time time) {
+std::ostream &operator<<(std::ostream &os, const Time time) {
   os << std::to_string(toUniversal(time));
   return os;
 }
@@ -48,30 +45,26 @@ Duration fromMilliseconds(const int64 milliseconds) {
       std::chrono::milliseconds(milliseconds));
 }
 
-std::string toString(const Time &time){
+std::string toString(const Time &time) {
   return std::to_string(toUniversal(time));
 }
 
 rclcpp::Time toRos(Time time) {
   int64_t uts_timestamp = toUniversal(time);
   int64_t ns_since_unix_epoch =
-      (uts_timestamp -
-       kUtsEpochOffsetFromUnixEpochInSeconds *
-           10000000ll) *
+      (uts_timestamp - kUtsEpochOffsetFromUnixEpochInSeconds * 10000000ll) *
       100ll;
-  ::rclcpp::Time ros_time(ns_since_unix_epoch); 
+  // rclcpp::Time::ro
+  ::rclcpp::Time ros_time(ns_since_unix_epoch);
   return ros_time;
 }
 
-Time fromRos(const ::rclcpp::Time& time) {
+Time fromRos(const ::rclcpp::Time &time) {
   // The epoch of the ICU Universal Time Scale is "0001-01-01 00:00:00.0 +0000",
   // exactly 719162 days before the Unix epoch.
-  return fromUniversal(
-      (time.seconds() +
-       kUtsEpochOffsetFromUnixEpochInSeconds) *
-          10000000ll +
-      (time.nanoseconds() + 50) / 100);  // + 50 to get the rounding correct.
+  return fromUniversal((kUtsEpochOffsetFromUnixEpochInSeconds) * 10000000ll +
+                       (time.nanoseconds() + 50) /
+                           100); // + 50 to get the rounding correct.
 }
-
 
 } // namespace icp_loco

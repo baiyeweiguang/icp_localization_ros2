@@ -8,6 +8,7 @@
 #include "icp_localization_ros2/RangeDataAccumulator.hpp"
 #include "icp_localization_ros2/common/typedefs.hpp"
 #include "icp_localization_ros2/helpers.hpp"
+#include <memory>
 #include <pcl/io/pcd_io.h>
 #include <pcl_conversions/pcl_conversions.h>
 #include <rclcpp/clock.hpp>
@@ -33,6 +34,7 @@ Pointcloud::Ptr loadPointcloudFromPcd(const std::string &filename) {
 }
 
 void publishCloud(
+    std::shared_ptr<rclcpp::Node> node,
     Pointcloud::Ptr cloud,
     const rclcpp::Publisher<sensor_msgs::msg::PointCloud2>::SharedPtr &pub,
     const std::string &frameId) {
@@ -40,7 +42,7 @@ void publishCloud(
   cloud->header.seq = 0;
   sensor_msgs::msg::PointCloud2 msg;
   pcl::toROSMsg(*cloud, msg);
-  msg.header.stamp = rclcpp::Clock().now();
+  msg.header.stamp = node->now(); 
   pub->publish(msg);
 }
 
@@ -69,7 +71,7 @@ int main(int argc, char **argv) {
   node->initialize();
   std::cout << "succesfully initialized icp" << std::endl;
 
-  publishCloud(mapCloud, cloudPub, node->getFixedFrame());
+  publishCloud(node->shared_from_this(),mapCloud, cloudPub, node->getFixedFrame());
 
   // ros::AsyncSpinner spinner(3);
   // spinner.start();
